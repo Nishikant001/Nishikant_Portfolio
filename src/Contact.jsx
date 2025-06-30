@@ -1,16 +1,12 @@
-import React, { useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { 
   Mail, 
   Phone, 
   MapPin, 
   Send,
   Linkedin,
-  Twitter,
-  Instagram,
-  
-  
+  Github
 } from 'lucide-react';
-import { FaGithub } from "react-icons/fa";
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -22,37 +18,108 @@ const ContactSection = () => {
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  
+  const [submitError, setSubmitError] = useState('');
+  const formRef = useRef();
+
+  // Initialize EmailJS when component mounts
+  useEffect(() => {
+    // Load EmailJS script dynamically
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+    script.onload = () => {
+      // Initialize EmailJS with your public key
+      if (window.emailjs) {
+        window.emailjs.init('f-Xi-h0XXZQnmDZkQ');
+      }
+    };
+    document.head.appendChild(script);
+
+    return () => {
+      // Cleanup
+      if (document.head.contains(script)) {
+        document.head.removeChild(script);
+      }
+    };
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevState => ({
       ...prevState,
       [name]: value
     }));
+    
+    // Clear any previous errors when user starts typing
+    if (submitError) {
+      setSubmitError('');
+    }
   };
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
     
-    // Simulate form submission
-    setTimeout(() => {
+    // Reset states
+    setIsSubmitting(true);
+    setSubmitError('');
+    setSubmitSuccess(false);
+
+    try {
+      // Check if EmailJS is loaded
+      if (!window.emailjs) {
+        throw new Error('EmailJS service is not available. Please try again later.');
+      }
+
+      // Create template parameters object
+      const templateParams = {
+        name: formData.name,
+        email: formData.email,
+        subject: formData.subject,
+        message: formData.message,
+        to_name: 'Nishikant', // Your name
+      };
+
+      // Send email using EmailJS with template parameters
+      const result = await window.emailjs.send(
+        'service_qhc4y73',    // Your EmailJS service ID
+        'template_nccfytd',   // Your EmailJS template ID
+        templateParams,       // Template parameters
+        'f-Xi-h0XXZQnmDZkQ'   // Your EmailJS public key
+      );
+
+      console.log('Email successfully sent!', result.text);
+      
+      // Success handling
       setIsSubmitting(false);
       setSubmitSuccess(true);
+      
+      // Reset form
       setFormData({
         name: '',
         email: '',
         subject: '',
         message: ''
       });
-      
-      // Reset success message after 5 seconds
+
+      // Auto-hide success message after 5 seconds
       setTimeout(() => {
         setSubmitSuccess(false);
       }, 5000);
-    }, 1500);
+
+    } catch (error) {
+      console.error('Email sending failed:', error);
+      setIsSubmitting(false);
+      
+      // Set user-friendly error message
+      if (error.text) {
+        setSubmitError(`Failed to send message: ${error.text}`);
+      } else if (error.message) {
+        setSubmitError(error.message);
+      } else {
+        setSubmitError('Failed to send message. Please try again later or contact me directly via email.');
+      }
+    }
   };
-  
+
   return (
     <section id="contact" className="py-20 bg-orange-50 relative">
       {/* Decorative top border inspired by Indian patterns */}
@@ -158,19 +225,21 @@ const ContactSection = () => {
               <h4 className="text-gray-800 font-semibold mb-4">Connect with me</h4>
               <div className="flex space-x-4">
                 <a 
-                  href="www.linkedin.com/in/nishikant008" 
+                  href="https://www.linkedin.com/in/nishikant008" 
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="h-12 w-12 rounded-full bg-orange-600 text-white flex items-center justify-center hover:bg-orange-700 transition-colors duration-300"
                 >
                   <Linkedin className="h-5 w-5" />
                 </a>
                 <a 
                   href="https://github.com/Nishikant001" 
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="h-12 w-12 rounded-full bg-orange-600 text-white flex items-center justify-center hover:bg-orange-700 transition-colors duration-300"
                 >
-                  <FaGithub className="h-5 w-5" />
+                  <Github className="h-5 w-5" />
                 </a>
-              
-                
               </div>
             </div>
             
@@ -189,7 +258,7 @@ const ContactSection = () => {
           <div className="bg-white rounded-2xl shadow-lg p-8 border border-orange-100">
             <h3 className="text-2xl font-bold text-gray-800 mb-6">Send Message</h3>
             
-            <form onSubmit={handleSubmit}>
+            <div ref={formRef}>
               <div className="mb-6">
                 <label htmlFor="name" className="block text-gray-700 font-medium mb-2">Your Name</label>
                 <input
@@ -247,7 +316,8 @@ const ContactSection = () => {
               </div>
               
               <button
-                type="submit"
+                type="button"
+                onClick={handleSubmit}
                 disabled={isSubmitting}
                 className={`w-full py-3 px-6 flex items-center justify-center rounded-lg text-white font-medium transition-all duration-300 ${
                   isSubmitting 
@@ -270,16 +340,27 @@ const ContactSection = () => {
                   </>
                 )}
               </button>
-              
+
+              {/* Success Message */}
               {submitSuccess && (
                 <div className="mt-4 p-4 bg-green-50 text-green-700 rounded-lg flex items-start">
-                  <svg className="h-5 w-5 text-green-500 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <p className="ml-3">Your message has been sent successfully. I'll get back to you soon!</p>
+                  <p className="ml-3">Your message has been sent successfully! I'll get back to you soon.</p>
                 </div>
               )}
-            </form>
+
+              {/* Error Message */}
+              {submitError && (
+                <div className="mt-4 p-4 bg-red-50 text-red-700 rounded-lg flex items-start">
+                  <svg className="h-5 w-5 text-red-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <p className="ml-3">{submitError}</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
         
