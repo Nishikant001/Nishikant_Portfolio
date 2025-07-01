@@ -17,7 +17,7 @@ const projects = [
     image: trading,
     description: 'A modern trading web platform offering real-time charts, market insights, and secure transactions tailored for Indian investors.',
     technologies: ['React', 'Node.js', 'MongoDB', 'Stripe', 'Tailwind CSS'],
-    demoLink: 'https://monstergym63.vercel.app/', // Replace with actual trading demo
+    demoLink: 'https://jolly-lollipop-237f09.netlify.app/', // Replace with actual trading demo
     codeLink: 'https://github.com/Nishikant001?tab=repositories',
   },
   {
