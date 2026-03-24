@@ -167,7 +167,7 @@ const Footer = () => {
                   className="text-gray-400 hover:text-orange-500 transition-colors duration-300 flex items-center"
                 >
                   <Mail className="h-5 w-5 mr-3 text-gray-500" />
-                  <span>contact@example.com</span>
+                  <span>sahoonishikant008@gmail.com</span>
                 </a>
               </li>
               <li>
@@ -176,12 +176,12 @@ const Footer = () => {
                   className="text-gray-400 hover:text-orange-500 transition-colors duration-300 flex items-center"
                 >
                   <Phone className="h-5 w-5 mr-3 text-gray-500" />
-                  <span>+91 XX XXXX XXXX</span>
+                  <span>+91 6372770485</span>
                 </a>
               </li>
               <li className="flex items-start">
                 <MapPin className="h-5 w-5 mr-3 text-gray-500 mt-1" />
-                <span className="text-gray-400">Bangalore, Karnataka, India</span>
+                <span className="text-gray-400">Bhubaneswar, Odisha, India</span>
               </li>
             </ul>
           </div>
@@ -221,7 +221,7 @@ const Footer = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-8">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="text-gray-500 text-sm mb-4 md:mb-0">
-            © {currentYear} Your Name. All rights reserved.
+            © {currentYear} Nishikant. All rights reserved.
           </div>
           <div className="flex flex-wrap justify-center">
             <a href="#" className="text-gray-500 hover:text-orange-500 transition-colors duration-300 mx-3 text-sm">Privacy Policy</a>
