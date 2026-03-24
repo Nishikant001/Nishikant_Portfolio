@@ -97,7 +97,7 @@ const Footer = () => {
         <div className="grid md:grid-cols-4 gap-12">
           {/* Column 1: About */}
           <div className="col-span-full md:col-span-1">
-            <h3 className="text-xl font-bold mb-6">Your Name</h3>
+            <h3 className="text-xl font-bold mb-6">Nishikant Sahoo</h3>
             <p className="text-gray-400 mb-6 leading-relaxed">
               Full stack developer specializing in modern web technologies with a passion for creating beautiful, 
               functional user experiences inspired by Indian design sensibilities.
