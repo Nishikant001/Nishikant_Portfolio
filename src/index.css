@@ -1,0 +1,13 @@
+/* Legacy utility kept from the original project */
+.nav {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* Experience timeline dot lights up when its entry reaches the reading line */
+.exp-dot.is-active {
+  background: #c4b5fd;
+  box-shadow: 0 0 0 8px rgba(196, 181, 253, 0.14), 0 0 28px rgba(167, 139, 250, 0.55);
+}
